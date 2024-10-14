@@ -25,6 +25,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -37,6 +38,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.my.a15.ui.theme._15Theme
 import com.my.a15.ui.theme.colorCorrectPosition
+import kotlinx.coroutines.delay
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -45,16 +47,37 @@ class MainActivity : ComponentActivity() {
         setContent {
             _15Theme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { paddingValues ->
-                    Greeting(paddingValues = paddingValues)
+                    //todo inject FifteenEngine add fun chect isCorrect position
+                    My15Puzzle(paddingValues = paddingValues)
                 }
             }
+        }
+    }
+
+    @Composable
+    private fun CountStep() {
+        val tempCount = remember { mutableStateOf(0) }
+        val countStep = remember { mutableStateOf(0) }
+        LaunchedEffect(key1 = tempCount.value) {
+            delay(600)
+            repeat(tempCount.value - countStep.value) {
+                delay(300)
+                countStep.value++
+            }
+        }
+        Box(
+            Modifier
+                .fillMaxSize(),
+            contentAlignment = Alignment.Center
+        ) {
+            Text(countStep.value.toString())
         }
     }
 }
 
 @Composable
-fun Greeting(modifier: Modifier = Modifier, paddingValues: PaddingValues = PaddingValues()) {
-    val list = remember { mutableStateOf((listOf(null) + (1..15)).shuffled()) }
+fun My15Puzzle(modifier: Modifier = Modifier, paddingValues: PaddingValues = PaddingValues()) {
+    val list = remember { mutableStateOf(generateList()) }
     val listReference = (1..16).toList()
 
     var indexNull: Int? = null
@@ -204,7 +227,7 @@ fun Greeting(modifier: Modifier = Modifier, paddingValues: PaddingValues = Paddi
 @Composable
 fun GreetingPreview() {
     _15Theme {
-        Greeting()
+        My15Puzzle()
     }
 }
 
@@ -213,3 +236,32 @@ fun <T> List<T>.swap(index1: Int, index2: Int): List<T> {
     newList[index1] = newList[index2].also { newList[index2] = newList[index1] }
     return newList.toList()
 }
+
+
+
+
+fun generateList(): List<Int?> {
+    val l = ((1..15) + null).toMutableList()
+    fun isSolvable(tiles: List<Int?>): Boolean {
+        val flattened = tiles.filterNotNull() // Убираем null
+        val inversions = flattened.indices.sumBy { i ->
+            (i + 1 until flattened.size).count { j -> flattened[i] > flattened[j] }
+        }
+
+        // Находим позицию пустой клетки (null)
+        val gridSize = Math.sqrt(tiles.size.toDouble()).toInt() // Размер сетки (например, 4x4)
+        val nullRow = tiles.indexOf(null) / gridSize // Ряд, где находится null
+
+        // Для четного размера поля нужно учитывать как число инверсий, так и позицию пустой клетки
+        return if (gridSize % 2 == 1) {
+            inversions % 2 == 0 // Если размер сетки нечётный, конфигурация решаема, если инверсий чётное число
+        } else {
+            (inversions + nullRow) % 2 == 1 // Для чётного размера сетки решаемость зависит от суммы инверсий и позиции null
+        }
+    }
+    do {
+        l.shuffle() // Перемешиваем список
+    } while (!isSolvable(l)) // Проверяем, решаемая ли конфигурация
+    return l
+}
+

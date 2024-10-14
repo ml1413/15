@@ -7,6 +7,8 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -18,9 +20,12 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardColors
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -28,9 +33,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.my.a15.ui.theme._15Theme
@@ -48,8 +55,6 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
-
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Greeting(modifier: Modifier = Modifier, paddingValues: PaddingValues = PaddingValues()) {
     Log.d("TAG1", "Greeting: ")
@@ -72,11 +77,22 @@ fun Greeting(modifier: Modifier = Modifier, paddingValues: PaddingValues = Paddi
         }
     )
 
-    Box(contentAlignment = Alignment.Center) {
+    Box(
+        modifier = modifier
+            .fillMaxSize()
+            .padding(16.dp),
+        contentAlignment = Alignment.Center
+    ) {
 
 
         LazyVerticalGrid(
-            modifier = modifier.aspectRatio(1f),
+            modifier = modifier
+                .aspectRatio(1f)
+                .border(
+                    width = 2.dp,
+                    color = MaterialTheme.colorScheme.onBackground,
+                    shape = RoundedCornerShape(16.dp)
+                ),
             columns = GridCells.Fixed(4),
             contentPadding = PaddingValues(8.dp)
         ) {
@@ -133,7 +149,8 @@ fun Greeting(modifier: Modifier = Modifier, paddingValues: PaddingValues = Paddi
                                 x = if (indexSwipeItem.value == itemIndex && isHorizontal.value) animatedOffset.value else 0.dp,
                                 y = if (indexSwipeItem.value == itemIndex && isHorizontal.value.not()) animatedOffset.value else 0.dp,
                             ),
-                        elevation = CardDefaults.elevatedCardElevation(8.dp)
+                        elevation = CardDefaults.elevatedCardElevation(8.dp),
+                        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.onBackground)
                     ) {
 
                         Box(
@@ -143,7 +160,12 @@ fun Greeting(modifier: Modifier = Modifier, paddingValues: PaddingValues = Paddi
                         )
                         {
 
-                            Text(it.toString())
+                            Text(
+                                text = it.toString(),
+                                color = MaterialTheme.colorScheme.background,
+                                fontWeight = FontWeight.ExtraBold,
+                                style = MaterialTheme.typography.displaySmall
+                            )
                         }
                     }
                 }

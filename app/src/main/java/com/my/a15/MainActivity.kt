@@ -29,7 +29,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
@@ -57,21 +56,34 @@ class MainActivity : ComponentActivity() {
 fun Greeting(modifier: Modifier = Modifier, paddingValues: PaddingValues = PaddingValues()) {
     val list = remember { mutableStateOf((listOf(null) + (1..15)).shuffled()) }
     val listReference = (1..16).toList()
+
     var indexNull: Int? = null
-    val itemWidth = remember { mutableStateOf(0) }
     var width = 0
+
     val indexSwipeItem = remember { mutableStateOf(0) }
     val indexEmptyItem = remember { mutableStateOf(0) }
-    val isHorizontal = remember { mutableStateOf(true) }
-    //animation
-    val animatedOffset = animateDpAsState(
-        targetValue = with(LocalDensity.current) { itemWidth.value.toDp() },
+
+    val localDensity = LocalDensity.current
+
+    val targetValuePairXY = remember { mutableStateOf(Pair(0.dp, 0.dp)) }
+    val swapElement: () -> Unit =
+        { list.value = list.value.swap(indexSwipeItem.value, indexEmptyItem.value) }
+    //animationX
+    val animatedOffsetX = animateDpAsState(
+        targetValue = targetValuePairXY.value.first,
         animationSpec = tween(durationMillis = 100),
         finishedListener = { dp ->
-            itemWidth.value = 0
-            if (dp.value != 0f) {
-                list.value = list.value.swap(indexSwipeItem.value, indexEmptyItem.value)
-            }
+            targetValuePairXY.value = Pair(0.dp, 0.dp)
+            if (dp.value != 0f) swapElement()
+        }
+    )
+    //animationY
+    val animatedOffsetY = animateDpAsState(
+        targetValue = targetValuePairXY.value.second,
+        animationSpec = tween(durationMillis = 100),
+        finishedListener = { dp ->
+            targetValuePairXY.value = Pair(0.dp, 0.dp)
+            if (dp.value != 0f) swapElement()
         }
     )
 
@@ -82,8 +94,6 @@ fun Greeting(modifier: Modifier = Modifier, paddingValues: PaddingValues = Paddi
             .padding(16.dp),
         contentAlignment = Alignment.Center
     ) {
-
-
         LazyVerticalGrid(
             modifier = modifier
                 .aspectRatio(1f)
@@ -111,31 +121,39 @@ fun Greeting(modifier: Modifier = Modifier, paddingValues: PaddingValues = Paddi
 
                                     when {
                                         dragAmount.x > 0 && indexNull == itemIndex + 1 -> {
-                                            isHorizontal.value = true
+                                            //swap right
+                                            targetValuePairXY.value =
+                                                targetValuePairXY.value
+                                                    .copy(first = with(localDensity) { width.toDp() })
                                             indexSwipeItem.value = itemIndex
                                             indexEmptyItem.value = itemIndex + 1
-                                            itemWidth.value = width
                                         }
 
                                         dragAmount.x < 0 && indexNull == itemIndex - 1 -> {
-                                            isHorizontal.value = true
+                                            //swap left
+                                            targetValuePairXY.value =
+                                                targetValuePairXY.value
+                                                    .copy(first = with(localDensity) { -width.toDp() })
                                             indexSwipeItem.value = itemIndex
                                             indexEmptyItem.value = itemIndex - 1
-                                            itemWidth.value = -width
                                         }
 
                                         dragAmount.y > 0 && indexNull == itemIndex + 4 -> {
-                                            isHorizontal.value = false
+                                            //swap top
+                                            targetValuePairXY.value =
+                                                targetValuePairXY.value
+                                                    .copy(second = with(localDensity) { width.toDp() })
                                             indexSwipeItem.value = itemIndex
                                             indexEmptyItem.value = itemIndex + 4
-                                            itemWidth.value = width
                                         }
 
                                         dragAmount.y < 0 && indexNull == itemIndex - 4 -> {
-                                            isHorizontal.value = false
+                                            //swap bottom
+                                            targetValuePairXY.value =
+                                                targetValuePairXY.value
+                                                    .copy(second = with(localDensity) { -width.toDp() })
                                             indexSwipeItem.value = itemIndex
                                             indexEmptyItem.value = itemIndex - 4
-                                            itemWidth.value = -width
                                         }
                                     }
 
@@ -149,8 +167,8 @@ fun Greeting(modifier: Modifier = Modifier, paddingValues: PaddingValues = Paddi
                             )
                             .offset
                                 (
-                                x = if (indexSwipeItem.value == itemIndex && isHorizontal.value) animatedOffset.value else 0.dp,
-                                y = if (indexSwipeItem.value == itemIndex && isHorizontal.value.not()) animatedOffset.value else 0.dp,
+                                x = if (indexSwipeItem.value == itemIndex) animatedOffsetX.value else 0.dp,
+                                y = if (indexSwipeItem.value == itemIndex) animatedOffsetY.value else 0.dp,
                             ),
                         elevation = CardDefaults.elevatedCardElevation(8.dp),
                         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.onBackground)

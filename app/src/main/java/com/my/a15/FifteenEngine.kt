@@ -1,33 +1,23 @@
 package com.my.a15
 
+import android.util.Log
+
 interface FifteenEngine {
-    fun transitionState(oldState: List<Int?>, cell: Int): List<Int?>
+    fun transitionState(oldState: List<Int?>, index1: Int, index2: Int): List<Int?>
     fun isWin(state: List<Int?>): Boolean
     fun getInitialState(): List<Int?>
+    fun checkPosition(cell: Int, index: Int): Boolean
 
     companion object : FifteenEngine {
         const val EMPTY = 16
         const val DIM = 4
         val FINAL_STATE = (1..15) + null
-
-        override fun transitionState(oldState: List<Int?>, cell: Int): List<Int?> {
-            return replace(value = cell, list = oldState)
+        
+        override fun transitionState(oldState: List<Int?>, index1: Int, index2: Int): List<Int?> {
+            return replace2(oldState, index1, index2)
         }
 
-        override fun isWin(state: List<Int?>): Boolean {
-//            var temp = 0
-//            var isSorted = false
-//            for (i in state) {
-//                if ((i != null && temp > i) || (temp < 15 && i == null)) {
-//                    isSorted = true
-//                    break
-//                }
-//                if (i != null) temp = i
-//            }
-//            if (!isSorted) println("ПОБЕДА")
-//            return isSorted
-            return state == FINAL_STATE
-        }
+        override fun isWin(state: List<Int?>)= state == FINAL_STATE
 
         override fun getInitialState(): List<Int?> {
             val mutableList = FINAL_STATE.toMutableList()
@@ -55,39 +45,17 @@ interface FifteenEngine {
             return mutableList.toList()
         }
 
-        private fun checkPeripheryNum(indexNull: Int, indexCell: Int, list: List<Int?>): Boolean {
-            val leftNum = if (indexNull % DIM == 0) null else indexNull - 1
-            val rightNum = if ((indexNull + 1) % DIM == 0) null else indexNull + 1
-            val upNum = if (indexNull < DIM) null else indexNull - DIM
-            val bottomNum = if (indexNull + 4 > list.lastIndex) null else indexNull + DIM
-            val listIndex = listOf(leftNum, rightNum, upNum, bottomNum)
-            return listIndex.contains(indexCell)
-        }
+        override fun checkPosition(cell: Int, index: Int): Boolean =
+            cell == FINAL_STATE[index]
 
-        private fun replace(value: Int, list: List<Int?>): List<Int?> {
-            val indexNull = list.indexOf(null)
-            val indexCell = list.indexOf(value)
-            val cellIsInRange = value in (0..EMPTY)
-            val isCorrectNum =
-                checkPeripheryNum(indexNull = indexNull, indexCell = indexCell, list = list)
-            return if (cellIsInRange && isCorrectNum) {
-                val mutableList = list.toMutableList()
-                mutableList[indexCell] = mutableList[indexNull]
-                    .also { mutableList[indexNull] = mutableList[indexCell] }
-                mutableList
-            } else {
-                println("не корректное число !")
-                list
-            }
+
+        private fun replace2(oldState: List<Int?>, index1: Int, index2: Int): List<Int?> {
+            val newList = oldState.toMutableList()
+            newList[index1] = newList[index2].also { newList[index2] = newList[index1] }
+            return newList.toList()
         }
 
     }
 
-    fun myPrint(list: List<Int?>) {
-        for ((i, v) in list.withIndex()) {
-            if (i % DIM == 0) repeat(2) { println() }
-            print(String.format("%-5s", (v ?: "")))
-        }
-    }
 }
 

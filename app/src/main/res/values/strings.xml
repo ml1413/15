@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">15</string>
+    <string name="victory">VICTORY</string>
+    <string name="the_game_is_on">the game is on</string>
 </resources>

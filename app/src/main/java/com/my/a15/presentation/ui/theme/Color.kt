@@ -1,4 +1,4 @@
-package com.my.a15.ui.theme
+package com.my.a15.presentation.ui.theme
 
 import androidx.compose.ui.graphics.Color
 

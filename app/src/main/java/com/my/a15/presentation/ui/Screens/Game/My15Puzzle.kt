@@ -19,13 +19,11 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.State
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
@@ -149,7 +147,7 @@ fun My15Puzzle(
                                     x = if (indexItem.value == itemIndex) animatedOffsetX.value else 0.dp,
                                     y = if (indexItem.value == itemIndex) animatedOffsetY.value else 0.dp,
                                 ),
-                            elevation = CardDefaults.elevatedCardElevation(8.dp),
+                            elevation = CardDefaults.cardElevation(4.dp),
                             colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.onBackground)
                         ) {
 
@@ -163,7 +161,7 @@ fun My15Puzzle(
                                 Text(
                                     text = myCell.num.toString(),
                                     color = when (myCell.colorCell) {
-                                        ColorCell.DEFAULT -> Color.Unspecified
+                                        ColorCell.DEFAULT -> MaterialTheme.colorScheme.background
                                         ColorCell.CORRECT_POSITION -> colorCorrectPosition
                                     },
                                     fontWeight = FontWeight.ExtraBold,

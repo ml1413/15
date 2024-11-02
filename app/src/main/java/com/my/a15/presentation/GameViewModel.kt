@@ -16,6 +16,10 @@ class GameViewModel : ViewModel() {
     val gameState: LiveData<GameState> = _gameState
 
     init {
+        getStartedState()
+    }
+
+    fun getStartedState() {
         _gameState.value = GameState.ResumeGame(myModelNum = getStartedModelUseCase())
     }
 

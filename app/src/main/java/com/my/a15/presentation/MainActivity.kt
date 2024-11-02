@@ -29,9 +29,11 @@ import androidx.compose.ui.unit.dp
 import com.my.a15.R
 import com.my.a15.presentation.ui.Screens.Game.GameScreen
 import com.my.a15.presentation.ui.theme._15Theme
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import kotlin.system.exitProcess
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

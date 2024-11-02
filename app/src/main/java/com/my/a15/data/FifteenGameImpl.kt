@@ -29,12 +29,12 @@ class FifteenGameImpl : FifteenGame {
 
     private fun getStartModel(): MyModelNum {
         val listModel = getListInt().mapIndexed { index, intValue ->
-           intValue?.let {
-               val color = getColorCorrectPosition(intValue, index)
-               MyCell(num = it, colorCell = color)
-           }
+            intValue?.let {
+                val color = getColorCorrectPosition(intValue, index)
+                MyCell(num = it, colorCell = color)
+            }
         }
-        return MyModelNum(listCells = listModel)
+        return MyModelNum(isVictory = false, countStep = 0, listCells = listModel)
     }
 
     private fun getColorCorrectPosition(intValue: Int, index: Int): ColorCell {

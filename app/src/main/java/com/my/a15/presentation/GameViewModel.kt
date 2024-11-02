@@ -6,11 +6,14 @@ import androidx.lifecycle.ViewModel
 import com.my.a15.domain.MyModelNum
 import com.my.a15.domain.usecase.GetStartedModelUseCase
 import com.my.a15.domain.usecase.ReplaceElementUseCase
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class GameViewModel : ViewModel() {
-    // todo need inject
-    val getStartedModelUseCase = GetStartedModelUseCase()
-    val replaceElementUseCase = ReplaceElementUseCase()
+@HiltViewModel
+class GameViewModel @Inject constructor(
+    private val getStartedModelUseCase: GetStartedModelUseCase,
+    private val replaceElementUseCase: ReplaceElementUseCase
+) : ViewModel() {
 
     private val _gameState = MutableLiveData<GameState>(GameState.Initial)
     val gameState: LiveData<GameState> = _gameState
@@ -38,6 +41,14 @@ class GameViewModel : ViewModel() {
 
     }
 
+
+    sealed class GameState() {
+        object Initial : GameState()
+        class ResumeGame(val myModelNum: MyModelNum) : GameState()
+        object Victory : GameState()
+    }
+
+    /** other method _____________________________________________________________________________*/
     private fun GameState.state(
         initial: () -> Unit = {},
         resumeGame: (MyModelNum) -> Unit = {},
@@ -48,11 +59,5 @@ class GameViewModel : ViewModel() {
             GameState.Initial -> initial()
             GameState.Victory -> victory()
         }
-    }
-
-    sealed class GameState() {
-        object Initial : GameState()
-        class ResumeGame(val myModelNum: MyModelNum) : GameState()
-        object Victory : GameState()
     }
 }

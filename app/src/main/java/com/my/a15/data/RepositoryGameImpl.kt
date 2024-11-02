@@ -2,10 +2,10 @@ package com.my.a15.data
 
 import com.my.a15.domain.MyModelNum
 import com.my.a15.domain.RepositoryGame
+import javax.inject.Inject
 
-class RepositoryGameImpl() : RepositoryGame {
-    // todo neeed inject
-    private val fifteenGame = FifteenGameImpl()
+class RepositoryGameImpl@Inject constructor( private val fifteenGame: FifteenGame) : RepositoryGame {
+
     override fun getStartGameModel(): MyModelNum {
         return fifteenGame.getStartGameModel()
     }

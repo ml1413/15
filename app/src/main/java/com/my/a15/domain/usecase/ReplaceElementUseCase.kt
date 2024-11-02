@@ -1,11 +1,11 @@
 package com.my.a15.domain.usecase
 
-import com.my.a15.data.RepositoryGameImpl
 import com.my.a15.domain.MyModelNum
+import com.my.a15.domain.RepositoryGame
+import javax.inject.Inject
 
-class ReplaceElementUseCase {
-    // todo need inject
-    val repositoryGameImpl = RepositoryGameImpl()
+class ReplaceElementUseCase @Inject constructor(private val repositoryGameImpl: RepositoryGame) {
+
     operator fun invoke(myModelNum: MyModelNum, indexItem: Int, indexNull: Int): MyModelNum {
         return repositoryGameImpl.replaceElement(
             myModelNum = myModelNum,

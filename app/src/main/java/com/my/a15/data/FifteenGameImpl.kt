@@ -45,6 +45,7 @@ class FifteenGameImpl : FifteenGame {
 
     private fun getListInt(): List<Int?> {
         val mutableList = finalState.toMutableList()
+        // два дня на коленях умолял gpt сделать код
         fun isSolvable(tiles: List<Int?>): Boolean {
             val flattened = tiles.filterNotNull() // Убираем null
             val inversions = flattened.indices.sumBy { i ->

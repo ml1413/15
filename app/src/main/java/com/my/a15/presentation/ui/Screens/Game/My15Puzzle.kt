@@ -83,10 +83,10 @@ fun My15Puzzle(
                     .border(
                         width = 2.dp,
                         color = MaterialTheme.colorScheme.onBackground,
-                        shape = RoundedCornerShape(16.dp)
+                        shape = MaterialTheme.shapes.small
                     ),
                 columns = GridCells.Fixed(4),
-                contentPadding = PaddingValues(8.dp)
+                contentPadding = PaddingValues(4.dp)
             ) {
                 val listCells = state.myModelNum.listCells
                 items(listCells.size) { itemIndex ->
@@ -137,7 +137,7 @@ fun My15Puzzle(
 
                                     }
                                 }
-                                .padding(8.dp)
+                                .padding(4.dp)
                                 .clickable(
                                     interactionSource = MutableInteractionSource(),
                                     indication = null,
@@ -149,7 +149,8 @@ fun My15Puzzle(
                                     y = if (indexItem.value == itemIndex) animatedOffsetY.value else 0.dp,
                                 ),
                             elevation = CardDefaults.cardElevation(4.dp),
-                            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.onBackground)
+                            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.onBackground),
+                            shape = MaterialTheme.shapes.small
                         ) {
 
                             Box(

@@ -22,11 +22,12 @@ fun CountStep(
 ) {
     val gameViewModelState =
         gameViewModel.gameState.observeAsState(GameViewModel.GameState.Initial)
-
     when (val state = gameViewModelState.value) {
         is GameViewModel.GameState.ResumeGame -> {
-            // todo fix bag reset count & recomposition
-            val countStep = remember { mutableStateOf(0) }
+            val modelCountStep = state.myModelNum.countStep
+            val countStep = remember { mutableStateOf(modelCountStep) }
+            if (countStep.value > modelCountStep) countStep.value = 0
+            Log.i("TAG1", "ResumeGame: ")
             LaunchedEffect(key1 = state.myModelNum.countStep) {
                 delay(600)
                 repeat(state.myModelNum.countStep - countStep.value) {

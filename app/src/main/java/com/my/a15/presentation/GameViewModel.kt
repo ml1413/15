@@ -1,5 +1,6 @@
 package com.my.a15.presentation
 
+import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -22,8 +23,12 @@ class GameViewModel @Inject constructor(
         getStartedState()
     }
 
-    fun getStartedState() {
+    private fun getStartedState() {
         _gameState.value = GameState.ResumeGame(myModelNum = getStartedModelUseCase())
+    }
+
+    fun restartGame() {
+        getStartedState()
     }
 
     fun replaceElement(indexItem: Int, indexNull: Int) {

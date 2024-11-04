@@ -1,5 +1,6 @@
 package com.my.a15.presentation.ui.Screens.Game
 
+import android.util.Log
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.border
@@ -173,5 +174,6 @@ fun My15Puzzle(
                 }
             }
         }
+
     }
 }

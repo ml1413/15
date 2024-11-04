@@ -1,6 +1,5 @@
 package com.my.a15.presentation
 
-import android.content.pm.ActivityInfo
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -24,8 +23,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.LifecycleOwner
 import com.my.a15.R
 import com.my.a15.presentation.ui.Screens.Game.GameScreen
 import com.my.a15.presentation.ui.theme._15Theme
@@ -76,7 +77,6 @@ class MainActivity : ComponentActivity() {
 
         ) {
         val scope = rememberCoroutineScope()
-
         TopAppBar(
             navigationIcon = {
                 IconButton(
@@ -107,7 +107,7 @@ class MainActivity : ComponentActivity() {
                                 actionLabel = getString(R.string.ok),
                                 withDismissAction = true
                             ).apply {
-                                if (this == SnackbarResult.ActionPerformed) gameViewModel.getStartedState()
+                                if (this == SnackbarResult.ActionPerformed) gameViewModel.restartGame()
                             }
                         }
                     },

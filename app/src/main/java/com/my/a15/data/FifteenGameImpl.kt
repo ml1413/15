@@ -1,11 +1,18 @@
 package com.my.a15.data
 
+import android.util.Log
 import com.my.a15.domain.ColorCell
 import com.my.a15.domain.MyCell
 import com.my.a15.domain.MyModelNum
+import kotlin.math.sqrt
+
+const val GRID_16 = 15
+const val GRID_25 = 24
+const val GRID_36 = 35
 
 class FifteenGameImpl : FifteenGame {
-    private val finalState = (1..15) + null
+    private val finalState = (1..GRID_36) + null
+    private val sqrt = sqrt(finalState.size.toDouble()).toInt()
     override fun getStartGameModel(): MyModelNum {
         return getStartModel()
     }
@@ -28,14 +35,19 @@ class FifteenGameImpl : FifteenGame {
     /** OTHER METHOD ____________________________________________________________________________*/
 
     private fun getStartModel(): MyModelNum {
+        var indexNull: Int? = null
         val listModel = getListInt().mapIndexed { index, intValue ->
+            if (indexNull == null && intValue == null) {
+                indexNull = index
+            }
             intValue?.let {
                 val color = getColorCorrectPosition(intValue, index)
                 MyCell(num = it, colorCell = color)
             }
         }
-        return MyModelNum(isVictory = false, countStep = 0, listCells = listModel)
+        return MyModelNum(isVictory = false, countStep = 0, sqrt = sqrt, listCells = listModel)
     }
+
 
     private fun getColorCorrectPosition(intValue: Int, index: Int): ColorCell {
         return if (intValue == finalState[index]) ColorCell.CORRECT_POSITION
@@ -45,6 +57,7 @@ class FifteenGameImpl : FifteenGame {
 
     private fun getListInt(): List<Int?> {
         val mutableList = finalState.toMutableList()
+
         // два дня на коленях умолял gpt сделать код
         fun isSolvable(tiles: List<Int?>): Boolean {
             val flattened = tiles.filterNotNull() // Убираем null
@@ -78,6 +91,6 @@ class FifteenGameImpl : FifteenGame {
             myCell.copy(colorCell = color)
         }
 
-        return newList.toList()
+        return newList
     }
 }

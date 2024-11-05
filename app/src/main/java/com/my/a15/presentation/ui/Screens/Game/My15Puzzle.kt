@@ -14,7 +14,6 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
@@ -77,6 +76,7 @@ fun My15Puzzle(
         GameViewModel.GameState.Initial -> {}
         GameViewModel.GameState.Victory -> {}
         is GameViewModel.GameState.ResumeGame -> {
+            val myModelNum = state.myModelNum
             LazyVerticalGrid(
                 modifier = modifier
                     .aspectRatio(1f)
@@ -85,10 +85,10 @@ fun My15Puzzle(
                         color = MaterialTheme.colorScheme.onBackground,
                         shape = MaterialTheme.shapes.small
                     ),
-                columns = GridCells.Fixed(4),
+                columns = GridCells.Fixed(myModelNum.sqrt),
                 contentPadding = PaddingValues(4.dp)
             ) {
-                val listCells = state.myModelNum.listCells
+                val listCells = myModelNum.listCells
                 items(listCells.size) { itemIndex ->
                     val item = listCells[itemIndex]
                     if (item == null) indexNull.value = itemIndex
@@ -97,6 +97,7 @@ fun My15Puzzle(
                             modifier = Modifier
                                 .onGloballyPositioned { layoutCoordinates ->
                                     width = layoutCoordinates.size.width
+
                                 }
                                 .pointerInput(Unit) {
                                     // input swipe
@@ -118,7 +119,7 @@ fun My15Puzzle(
                                                 indexItem.value = itemIndex
                                             }
 
-                                            dragAmount.y > 0 && indexNull.value == itemIndex + 4 -> {
+                                            dragAmount.y > 0 && indexNull.value == itemIndex + myModelNum.sqrt -> {
                                                 //swap top
                                                 targetValuePairXY.value =
                                                     targetValuePairXY.value
@@ -126,7 +127,7 @@ fun My15Puzzle(
                                                 indexItem.value = itemIndex
                                             }
 
-                                            dragAmount.y < 0 && indexNull.value == itemIndex - 4 -> {
+                                            dragAmount.y < 0 && indexNull.value == itemIndex - myModelNum.sqrt -> {
                                                 //swap bottom
                                                 targetValuePairXY.value =
                                                     targetValuePairXY.value

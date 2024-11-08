@@ -1,19 +1,21 @@
 package com.my.a15.data
 
-import android.util.Log
+
 import com.my.a15.domain.ColorCell
 import com.my.a15.domain.MyCell
 import com.my.a15.domain.MyModelNum
 import kotlin.math.sqrt
 
-const val GRID_16 = 15
-const val GRID_25 = 24
-const val GRID_36 = 35
+enum class VariantGrid(val count: Int) {
+    GRID_16(15),
+    GRID_25(24),
+    GRID_36(35)
+}
 
 class FifteenGameImpl : FifteenGame {
-    private val finalState = (1..GRID_36) + null
-    private val sqrt = sqrt(finalState.size.toDouble()).toInt()
-    override fun getStartGameModel(): MyModelNum {
+    private var finalState: List<Int?> = emptyList()
+    override fun getStartGameModel(grid: VariantGrid): MyModelNum {
+        finalState = (1..grid.count) + null
         return getStartModel()
     }
 
@@ -45,7 +47,12 @@ class FifteenGameImpl : FifteenGame {
                 MyCell(num = it, colorCell = color)
             }
         }
-        return MyModelNum(isVictory = false, countStep = 0, sqrt = sqrt, listCells = listModel)
+        return MyModelNum(
+            isVictory = false,
+            countStep = 0,
+            sqrt = sqrt(finalState.size.toDouble()).toInt(),
+            listCells = listModel
+        )
     }
 
 

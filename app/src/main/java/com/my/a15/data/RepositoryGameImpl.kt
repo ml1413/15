@@ -6,8 +6,8 @@ import javax.inject.Inject
 
 class RepositoryGameImpl@Inject constructor( private val fifteenGame: FifteenGame) : RepositoryGame {
 
-    override fun getStartGameModel(): MyModelNum {
-        return fifteenGame.getStartGameModel()
+    override fun getStartGameModel(grid: VariantGrid): MyModelNum {
+        return fifteenGame.getStartGameModel(grid = grid)
     }
 
     override fun replaceElement(myModelNum: MyModelNum, indexItem: Int, indexNull: Int): MyModelNum {

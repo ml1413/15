@@ -5,6 +5,7 @@
     <string name="the_game_is_on">the game is on</string>
     // snack bar
     <string name="exit">Exit ?</string>
-    <string name="ok">OK</string>
-    <string name="reset_game">Reset game</string>
+    <string name="reset_game">Reset game ?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
 </resources>

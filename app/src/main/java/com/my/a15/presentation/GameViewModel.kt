@@ -1,9 +1,9 @@
 package com.my.a15.presentation
 
-import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.my.a15.data.VariantGrid
 import com.my.a15.domain.MyModelNum
 import com.my.a15.domain.usecase.GetStartedModelUseCase
 import com.my.a15.domain.usecase.ReplaceElementUseCase
@@ -23,12 +23,12 @@ class GameViewModel @Inject constructor(
         getStartedState()
     }
 
-    private fun getStartedState() {
-        _gameState.value = GameState.ResumeGame(myModelNum = getStartedModelUseCase())
+    private fun getStartedState(grid: VariantGrid = VariantGrid.GRID_16) {
+        _gameState.value = GameState.ResumeGame(myModelNum = getStartedModelUseCase(grid = grid))
     }
 
-    fun restartGame() {
-        getStartedState()
+    fun restartGame(grid: VariantGrid) {
+        getStartedState(grid = grid)
     }
 
     fun replaceElement(indexItem: Int, indexNull: Int) {

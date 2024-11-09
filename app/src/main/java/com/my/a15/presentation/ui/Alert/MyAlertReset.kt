@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.AlertDialog
@@ -12,12 +13,19 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.my.a15.R
+import com.my.a15.data.FifteenGameImpl
+import com.my.a15.data.RepositoryGameImpl
 import com.my.a15.data.VariantGrid
+import com.my.a15.domain.usecase.GetStartedModelUseCase
+import com.my.a15.domain.usecase.ReplaceElementUseCase
 import com.my.a15.presentation.GameViewModel
 
 @Composable
@@ -37,9 +45,9 @@ fun MyAlertReset(
                 title = { Text(text = stringResource(R.string.reset_game)) },
                 text = {
                     val list = listOf(
-                        VariantGrid.GRID_16,
-                        VariantGrid.GRID_25,
-                        VariantGrid.GRID_36
+                        VariantGrid.GRID_4X4,
+                        VariantGrid.GRID_5X5,
+                        VariantGrid.GRID_6X6
                     )
                     LazyRow(
                         verticalAlignment = Alignment.CenterVertically,
@@ -47,7 +55,7 @@ fun MyAlertReset(
                     ) {
                         items(list) { item ->
                             OutlinedButton(
-                                modifier = modifier.padding(8.dp),
+                                modifier = modifier.padding(8.dp).size(128.dp),
                                 shape = MaterialTheme.shapes.small,
                                 onClick = {
                                     onDismissRequest()
@@ -74,4 +82,20 @@ fun MyAlertReset(
                 }
             )
         }
+}
+
+@Composable
+@Preview(showSystemUi = true, showBackground = true)
+fun Preview(modifier: Modifier = Modifier) {
+    val isShowAlertReset = remember { mutableStateOf(true) }
+
+    val fifteenGameImpl = FifteenGameImpl()
+    val repositoryGameImpl = RepositoryGameImpl(fifteenGameImpl)
+    val getStartedModelUseCase = GetStartedModelUseCase(repositoryGameImpl)
+    val replaceElementUseCase = ReplaceElementUseCase(repositoryGameImpl)
+    val gameViewModel = GameViewModel(getStartedModelUseCase, replaceElementUseCase)
+    MaterialTheme {
+        MyAlertReset(isShowAlertReset = isShowAlertReset, gameViewModel = gameViewModel)
+    }
+
 }

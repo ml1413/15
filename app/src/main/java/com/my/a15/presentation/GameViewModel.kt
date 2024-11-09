@@ -23,7 +23,7 @@ class GameViewModel @Inject constructor(
         getStartedState()
     }
 
-    private fun getStartedState(grid: VariantGrid = VariantGrid.GRID_16) {
+    private fun getStartedState(grid: VariantGrid = VariantGrid.GRID_5X5) {
         _gameState.value = GameState.ResumeGame(myModelNum = getStartedModelUseCase(grid = grid))
     }
 

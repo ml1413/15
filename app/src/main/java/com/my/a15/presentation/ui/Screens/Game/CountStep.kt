@@ -1,5 +1,6 @@
 package com.my.a15.presentation.ui.Screens.Game
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -43,14 +44,13 @@ fun CountStep(
                 Box(
                     modifier = modifier
                         .fillMaxWidth()
-                        .border(
-                            width = 2.dp,
-                            color = MaterialTheme.colorScheme.onBackground,
+                        .background(
+                            MaterialTheme.colorScheme.onBackground,
                             shape = MaterialTheme.shapes.small
                         ),
                     contentAlignment = Alignment.Center,
                 ) {
-                    Text(countStep.value.toString(), style = MaterialTheme.typography.displayLarge)
+                    Text(text = countStep.value.toString(), style = MaterialTheme.typography.displayLarge, color = MaterialTheme.colorScheme.background)
                 }
             }
         }

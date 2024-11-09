@@ -7,9 +7,9 @@ import com.my.a15.domain.MyModelNum
 import kotlin.math.sqrt
 
 enum class VariantGrid(val count: Int) {
-    GRID_16(15),
-    GRID_25(24),
-    GRID_36(35)
+    GRID_4X4(15),
+    GRID_5X5(24),
+    GRID_6X6(35)
 }
 
 class FifteenGameImpl : FifteenGame {
@@ -47,10 +47,11 @@ class FifteenGameImpl : FifteenGame {
                 MyCell(num = it, colorCell = color)
             }
         }
+        val sqrt = sqrt(finalState.size.toDouble()).toInt()
         return MyModelNum(
             isVictory = false,
             countStep = 0,
-            sqrt = sqrt(finalState.size.toDouble()).toInt(),
+            sqrt = sqrt,
             listCells = listModel
         )
     }

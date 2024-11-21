@@ -1,34 +1,42 @@
 package com.my.a15.presentation
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.my.a15.data.VariantGrid
-import com.my.a15.domain.MyModelNum
+import androidx.lifecycle.viewModelScope
+import com.my.a15.data.game.VariantGrid
+import com.my.a15.domain.model.MyModelNum
 import com.my.a15.domain.usecase.GetStartedModelUseCase
+import com.my.a15.domain.usecase.GetStartedUseCase
 import com.my.a15.domain.usecase.ReplaceElementUseCase
+import com.my.a15.domain.usecase.SaveInStorageUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
 import javax.inject.Inject
+
+private const val TAG = "GameViewModel"
 
 @HiltViewModel
 class GameViewModel @Inject constructor(
     private val getStartedModelUseCase: GetStartedModelUseCase,
-    private val replaceElementUseCase: ReplaceElementUseCase
+    private val replaceElementUseCase: ReplaceElementUseCase,
+    private val saveInStorageUseCase: SaveInStorageUseCase,
+    private val getStartedUseCase: GetStartedUseCase
 ) : ViewModel() {
 
     private val _gameState = MutableLiveData<GameState>(GameState.Initial)
     val gameState: LiveData<GameState> = _gameState
 
     init {
-        getStartedState()
-    }
-
-    private fun getStartedState(grid: VariantGrid = VariantGrid.GRID_5X5) {
-        _gameState.value = GameState.ResumeGame(myModelNum = getStartedModelUseCase(grid = grid))
+        viewModelScope.launch {
+            val myModelNum = getStartedUseCase()
+            _gameState.value = GameState.ResumeGame(myModelNum = myModelNum)
+        }
     }
 
     fun restartGame(grid: VariantGrid) {
-        getStartedState(grid = grid)
+        _gameState.value = GameState.ResumeGame(myModelNum = getStartedModelUseCase(grid = grid))
     }
 
     fun replaceElement(indexItem: Int, indexNull: Int) {
@@ -46,6 +54,16 @@ class GameViewModel @Inject constructor(
 
     }
 
+    fun saveToStorage() {
+        _gameState.value?.state(
+            resumeGame = { myModelNum ->
+                viewModelScope.launch {
+                    saveInStorageUseCase(myModelNum = myModelNum)
+                    Log.i(TAG, "saveToStorage: ")
+                }
+            }
+        )
+    }
 
     sealed class GameState() {
         object Initial : GameState()

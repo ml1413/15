@@ -1,6 +1,6 @@
-package com.my.a15.data
+package com.my.a15.data.game
 
-import com.my.a15.domain.MyModelNum
+import com.my.a15.domain.model.MyModelNum
 
 interface FifteenGame {
     fun getStartGameModel(grid: VariantGrid): MyModelNum

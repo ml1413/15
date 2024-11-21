@@ -21,9 +21,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.my.a15.R
-import com.my.a15.data.FifteenGameImpl
-import com.my.a15.data.RepositoryGameImpl
-import com.my.a15.data.VariantGrid
+import com.my.a15.data.game.FifteenGameImpl
+import com.my.a15.data.repository.RepositoryGameImpl
+import com.my.a15.data.game.VariantGrid
 import com.my.a15.domain.usecase.GetStartedModelUseCase
 import com.my.a15.domain.usecase.ReplaceElementUseCase
 import com.my.a15.presentation.GameViewModel
@@ -84,18 +84,3 @@ fun MyAlertReset(
         }
 }
 
-@Composable
-@Preview(showSystemUi = true, showBackground = true)
-fun Preview(modifier: Modifier = Modifier) {
-    val isShowAlertReset = remember { mutableStateOf(true) }
-
-    val fifteenGameImpl = FifteenGameImpl()
-    val repositoryGameImpl = RepositoryGameImpl(fifteenGameImpl)
-    val getStartedModelUseCase = GetStartedModelUseCase(repositoryGameImpl)
-    val replaceElementUseCase = ReplaceElementUseCase(repositoryGameImpl)
-    val gameViewModel = GameViewModel(getStartedModelUseCase, replaceElementUseCase)
-    MaterialTheme {
-        MyAlertReset(isShowAlertReset = isShowAlertReset, gameViewModel = gameViewModel)
-    }
-
-}

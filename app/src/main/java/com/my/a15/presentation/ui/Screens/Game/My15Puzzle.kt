@@ -29,7 +29,7 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.my.a15.domain.ColorCell
+import com.my.a15.domain.model.ColorCell
 import com.my.a15.presentation.GameViewModel
 import com.my.a15.presentation.ui.theme.colorCorrectPosition
 

@@ -1,9 +1,9 @@
-package com.my.a15.data
+package com.my.a15.data.game
 
 
-import com.my.a15.domain.ColorCell
-import com.my.a15.domain.MyCell
-import com.my.a15.domain.MyModelNum
+import com.my.a15.domain.model.ColorCell
+import com.my.a15.domain.model.MyCell
+import com.my.a15.domain.model.MyModelNum
 import kotlin.math.sqrt
 
 enum class VariantGrid(val count: Int) {

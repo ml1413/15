@@ -1,7 +1,7 @@
 package com.my.a15.domain.usecase
 
-import com.my.a15.data.VariantGrid
-import com.my.a15.domain.MyModelNum
+import com.my.a15.data.game.VariantGrid
+import com.my.a15.domain.model.MyModelNum
 import com.my.a15.domain.RepositoryGame
 import javax.inject.Inject
 

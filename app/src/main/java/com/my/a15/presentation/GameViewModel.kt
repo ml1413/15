@@ -36,6 +36,7 @@ class GameViewModel @Inject constructor(
     }
 
     fun restartGame(grid: VariantGrid) {
+        // todo need method restart
         _gameState.value = GameState.ResumeGame(myModelNum = getStartedModelUseCase(grid = grid))
     }
 

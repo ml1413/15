@@ -1,16 +1,24 @@
 package com.my.a15.data.game
 
 
+import android.util.Log
 import com.my.a15.domain.model.ColorCell
 import com.my.a15.domain.model.MyCell
 import com.my.a15.domain.model.MyModelNum
 import com.my.a15.domain.model.VariantGrid
 import kotlin.math.sqrt
 
+private const val TAG = "FifteenGameImpl"
 
 class FifteenGameImpl : FifteenGame {
     override fun getStartGameModel(): MyModelNum {
-        return getStartModel()
+        val model = getStartModel()
+        Log.i(TAG, "getStartGameModel:model $model ")
+        return model
+    }
+
+    override fun getRestartStartGameModel(variantGrid: VariantGrid): MyModelNum {
+        return getStartModel(variantGrid = variantGrid)
     }
 
     override fun replaceElement(
@@ -31,12 +39,14 @@ class FifteenGameImpl : FifteenGame {
 
     /** OTHER METHOD ____________________________________________________________________________*/
     // todo done
-    private fun getStartModel(): MyModelNum {
+    private fun getStartModel(variantGrid: VariantGrid? = null): MyModelNum {
         return MyModelNum().let { model ->
             var indexNull: Int? = null
-            val finalList = (1..model.variantGrid.count) + null
+            val grid = variantGrid ?: model.variantGrid
+            val finalList = (1..grid.count) + null
             model.copy(
                 finalList = finalList,
+                variantGrid = grid,
                 sqrt = sqrt(finalList.size.toDouble()).toInt(),
                 listCells = getListInt(donorList = finalList).mapIndexed { index, intValue ->
                     if (indexNull == null && intValue == null) {

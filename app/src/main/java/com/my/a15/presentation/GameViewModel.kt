@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.my.a15.domain.model.MyModelNum
 import com.my.a15.domain.model.VariantGrid
-import com.my.a15.domain.usecase.GetStartedModelUseCase
+import com.my.a15.domain.usecase.GetRestartStartedModelUseCase
 import com.my.a15.domain.usecase.GetStartedUseCase
 import com.my.a15.domain.usecase.ReplaceElementUseCase
 import com.my.a15.domain.usecase.SaveInStorageUseCase
@@ -19,10 +19,10 @@ private const val TAG = "GameViewModel"
 
 @HiltViewModel
 class GameViewModel @Inject constructor(
-    private val getStartedModelUseCase: GetStartedModelUseCase,
     private val replaceElementUseCase: ReplaceElementUseCase,
     private val saveInStorageUseCase: SaveInStorageUseCase,
-    private val getStartedUseCase: GetStartedUseCase
+    private val getStartedUseCase: GetStartedUseCase,
+    private val getRestartStartedModelUseCase: GetRestartStartedModelUseCase
 ) : ViewModel() {
 
     private val _gameState = MutableLiveData<GameState>(GameState.Initial)
@@ -35,8 +35,9 @@ class GameViewModel @Inject constructor(
         }
     }
 
-    fun restartGame(grid: VariantGrid) {
-
+    fun restartGame(variantGrid: VariantGrid) {
+        val restartModel = getRestartStartedModelUseCase(variantGrid = variantGrid)
+        _gameState.value = GameState.ResumeGame(myModelNum = restartModel)
     }
 
     fun replaceElement(indexItem: Int, indexNull: Int) {
@@ -49,6 +50,7 @@ class GameViewModel @Inject constructor(
                         indexNull = indexNull
                     )
                 _gameState.value = GameState.ResumeGame(myModelNum = newModel)
+                Log.i(TAG, "replaceElement: newModel $newModel")
             }
         )
 
@@ -59,7 +61,7 @@ class GameViewModel @Inject constructor(
             resumeGame = { myModelNum ->
                 viewModelScope.launch {
                     saveInStorageUseCase(myModelNum = myModelNum)
-                    Log.i(TAG, "saveToStorage: ")
+                    Log.i(TAG, "saveToStorage: myModelNum $myModelNum")
                 }
             }
         )
@@ -78,7 +80,10 @@ class GameViewModel @Inject constructor(
         victory: () -> Unit = {}
     ) {
         when (this) {
-            is GameState.ResumeGame -> resumeGame(this.myModelNum)
+            is GameState.ResumeGame -> {
+                Log.i(TAG, "state: myModelNum $myModelNum")
+                resumeGame(myModelNum)
+            }
             GameState.Initial -> initial()
             GameState.Victory -> victory()
         }

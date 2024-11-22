@@ -9,6 +9,7 @@ fun ModelNumEntity.mapToModel(): MyModelNum {
     return MyModelNum(
         isVictory = isVictory,
         variantGrid = variantGridEntity.mapToModel(),
+        finalList = finalListEntity,
         countStep = countStep,
         sqrt = sqrt,
         listCells = listCellsEntity.map { myCellEntity -> myCellEntity?.mapToModel() }

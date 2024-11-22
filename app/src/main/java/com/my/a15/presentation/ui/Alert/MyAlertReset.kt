@@ -52,7 +52,7 @@ fun MyAlertReset(
                                 shape = MaterialTheme.shapes.small,
                                 onClick = {
                                     onDismissRequest()
-                                    gameViewModel.restartGame(grid = item)
+                                    gameViewModel.restartGame(variantGrid = item)
                                 },
                                 content = {
                                     Text(item.toString())

@@ -9,7 +9,7 @@ import com.my.a15.data.storage.Room.FifteenDB
 import com.my.a15.data.storage.Room.StorageImpl
 import com.my.a15.data.storage.Storage
 import com.my.a15.domain.RepositoryGame
-import com.my.a15.domain.usecase.GetStartedModelUseCase
+import com.my.a15.domain.usecase.GetRestartStartedModelUseCase
 import com.my.a15.domain.usecase.GetStartedUseCase
 import com.my.a15.domain.usecase.ReplaceElementUseCase
 import com.my.a15.domain.usecase.SaveInStorageUseCase
@@ -36,10 +36,6 @@ class Module {
         return RepositoryGameImpl(fifteenGame = fifteenGame, storage = storage)
     }
 
-    @Provides
-    fun provideGetStartedModelUseCase(repositoryGameImpl: RepositoryGame): GetStartedModelUseCase {
-        return GetStartedModelUseCase(repositoryGameImpl = repositoryGameImpl)
-    }
 
     @Provides
     fun provideReplaceElementUseCase(repositoryGameImpl: RepositoryGame): ReplaceElementUseCase {
@@ -54,6 +50,11 @@ class Module {
     @Provides
     fun provideGetStartedUseCase(repositoryGameImpl: RepositoryGame): GetStartedUseCase {
         return GetStartedUseCase(repositoryGameImpl = repositoryGameImpl)
+    }
+
+    @Provides
+    fun provideGetRestartStartedModelUseCase(repositoryGameImpl: RepositoryGame): GetRestartStartedModelUseCase {
+        return GetRestartStartedModelUseCase(repositoryGameImpl = repositoryGameImpl)
     }
 
     @Provides

@@ -8,6 +8,7 @@ import com.my.a15.domain.model.VariantGrid
 import javax.inject.Inject
 
 private const val TAG = "RepositoryGameImpl"
+
 class RepositoryGameImpl @Inject constructor(
     private val fifteenGame: FifteenGame,
     private val storage: Storage
@@ -15,6 +16,10 @@ class RepositoryGameImpl @Inject constructor(
 
     override fun getStartGameModel(): MyModelNum {
         return fifteenGame.getStartGameModel()
+    }
+
+    override fun getRestartStartGameModel(variantGrid: VariantGrid): MyModelNum {
+        return fifteenGame.getRestartStartGameModel(variantGrid = variantGrid)
     }
 
     override fun replaceElement(
@@ -34,7 +39,7 @@ class RepositoryGameImpl @Inject constructor(
     }
 
     override suspend fun getFromStorage(): MyModelNum? {
-        val myModelNum= storage.getFromStorage()
+        val myModelNum = storage.getFromStorage()
         return myModelNum
     }
 }

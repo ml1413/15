@@ -5,7 +5,7 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 
 @Database(entities = [ModelNumEntity::class], version = 1)
-@TypeConverters(value = [MyTypeConvertersMyCellEntity::class, MyTypeConvertorFinalList::class])
+@TypeConverters(MyTypeConvertersMyCellEntity::class, MyTypeConvertorFinalList::class)
 abstract class FifteenDB : RoomDatabase() {
     abstract fun getDao(): FifteenDao
 

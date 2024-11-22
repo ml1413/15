@@ -16,7 +16,6 @@ fun GameScreen(
     modifier: Modifier = Modifier,
     gameViewModel: GameViewModel,
 ) {
-    MyLifeCycle(onPause = {gameViewModel.saveToStorage()})
     Column(
         modifier = modifier
             .fillMaxSize()

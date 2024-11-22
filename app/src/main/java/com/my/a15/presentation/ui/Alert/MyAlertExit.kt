@@ -1,18 +1,21 @@
 package com.my.a15.presentation.ui.Alert
 
+import android.app.Activity
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import com.my.a15.R
-import kotlin.system.exitProcess
 
 @Composable
 fun MyAlertExit(
@@ -20,7 +23,7 @@ fun MyAlertExit(
     isShowAlertExit: MutableState<Boolean>
 ) {
     val onDismissRequest: () -> Unit = { isShowAlertExit.value = isShowAlertExit.value.not() }
-
+    val context = LocalContext.current
     if (isShowAlertExit.value)
         Box(
             modifier = modifier
@@ -34,13 +37,19 @@ fun MyAlertExit(
                 },
                 shape = MaterialTheme.shapes.small,
                 dismissButton = {
-                    OutlinedButton(
+                    ElevatedButton(
                         shape = MaterialTheme.shapes.small,
                         onClick = {
                             onDismissRequest()
                         },
+                        colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.onBackground),
+
                         content = {
-                            Text(stringResource(R.string.no))
+                            Text(
+                                text = stringResource(R.string.no),
+                                fontWeight = FontWeight.ExtraBold,
+                                color = MaterialTheme.colorScheme.background
+                            )
                         },
                     )
                 },
@@ -48,13 +57,17 @@ fun MyAlertExit(
                     onDismissRequest()
                 },
                 confirmButton = {
-                    OutlinedButton(
+                    ElevatedButton(
                         shape = MaterialTheme.shapes.small,
                         onClick = {
-                            exitProcess(0)
+                            (context as Activity).finish()
                         },
+                        colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.onBackground),
                         content = {
-                            Text(stringResource(R.string.yes))
+                            Text(
+                                stringResource(R.string.yes), fontWeight = FontWeight.ExtraBold,
+                                color = MaterialTheme.colorScheme.background
+                            )
                         },
                     )
 

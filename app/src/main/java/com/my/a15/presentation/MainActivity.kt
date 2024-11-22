@@ -14,6 +14,7 @@ import androidx.compose.ui.Modifier
 import com.my.a15.presentation.ui.Alert.MyAlertExit
 import com.my.a15.presentation.ui.Alert.MyAlertReset
 import com.my.a15.presentation.ui.MyAppBar
+import com.my.a15.presentation.ui.MyLifeCycle
 import com.my.a15.presentation.ui.Screens.Game.GameScreen
 import com.my.a15.presentation.ui.theme._15Theme
 import dagger.hilt.android.AndroidEntryPoint
@@ -26,6 +27,7 @@ class MainActivity : ComponentActivity() {
 
         enableEdgeToEdge()
         setContent {
+            MyLifeCycle(onPause = { gameViewModel.saveToStorage() })
             _15Theme {
                 val isShowAlertExit = remember { mutableStateOf(false) }
                 val isShowAlertReset = remember { mutableStateOf(false) }

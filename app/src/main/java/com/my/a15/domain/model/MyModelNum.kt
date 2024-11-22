@@ -1,14 +1,12 @@
 package com.my.a15.domain.model
 
-import com.my.a15.data.storage.Room.ColorCellEntity
-import com.my.a15.data.storage.Room.ModelNumEntity
-import com.my.a15.data.storage.Room.MyCellEntity
-
 data class MyModelNum(
     val isVictory: Boolean = false,
+    val variantGrid: VariantGrid = VariantGrid.GRID_4X4,
+    val finalList: List<Int?> = emptyList(),
     val countStep: Int = 0,
-    val sqrt: Int,
-    val listCells: List<MyCell?>
+    val sqrt: Int = 0,
+    val listCells: List<MyCell?> = emptyList()
 )
 
 data class MyCell(
@@ -19,3 +17,10 @@ data class MyCell(
 enum class ColorCell {
     DEFAULT, CORRECT_POSITION
 }
+
+enum class VariantGrid(val count: Int) {
+    GRID_4X4(15),
+    GRID_5X5(24),
+    GRID_6X6(35)
+}
+

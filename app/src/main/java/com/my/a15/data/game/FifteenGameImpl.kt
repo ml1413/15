@@ -4,18 +4,12 @@ package com.my.a15.data.game
 import com.my.a15.domain.model.ColorCell
 import com.my.a15.domain.model.MyCell
 import com.my.a15.domain.model.MyModelNum
+import com.my.a15.domain.model.VariantGrid
 import kotlin.math.sqrt
 
-enum class VariantGrid(val count: Int) {
-    GRID_4X4(15),
-    GRID_5X5(24),
-    GRID_6X6(35)
-}
 
 class FifteenGameImpl : FifteenGame {
-    private var finalState: List<Int?> = emptyList()
-    override fun getStartGameModel(grid: VariantGrid): MyModelNum {
-        finalState = (1..grid.count) + null
+    override fun getStartGameModel(): MyModelNum {
         return getStartModel()
     }
 
@@ -25,8 +19,9 @@ class FifteenGameImpl : FifteenGame {
         indexNull: Int
     ): MyModelNum {
         val oldList = myModelNum.listCells
-        val newList = swap(oldList, indexItem, indexNull)
-        val isVictory = newList.map { it?.num } == finalState
+        val finalList = myModelNum.finalList
+        val newList = swap(finalList, oldList, indexItem, indexNull)
+        val isVictory = newList.map { it?.num } == finalList
         return myModelNum.copy(
             isVictory = isVictory,
             countStep = myModelNum.countStep + 1,
@@ -35,36 +30,41 @@ class FifteenGameImpl : FifteenGame {
     }
 
     /** OTHER METHOD ____________________________________________________________________________*/
-
+    // todo done
     private fun getStartModel(): MyModelNum {
-        var indexNull: Int? = null
-        val listModel = getListInt().mapIndexed { index, intValue ->
-            if (indexNull == null && intValue == null) {
-                indexNull = index
-            }
-            intValue?.let {
-                val color = getColorCorrectPosition(intValue, index)
-                MyCell(num = it, colorCell = color)
-            }
+        return MyModelNum().let { model ->
+            var indexNull: Int? = null
+            val finalList = (1..model.variantGrid.count) + null
+            model.copy(
+                finalList = finalList,
+                sqrt = sqrt(finalList.size.toDouble()).toInt(),
+                listCells = getListInt(donorList = finalList).mapIndexed { index, intValue ->
+                    if (indexNull == null && intValue == null) {
+                        indexNull = index
+                    }
+                    intValue?.let {
+                        val color =
+                            if (intValue == finalList[index]) ColorCell.CORRECT_POSITION else ColorCell.DEFAULT
+                        MyCell(num = it, colorCell = color)
+                    }
+                }
+            )
         }
-        val sqrt = sqrt(finalState.size.toDouble()).toInt()
-        return MyModelNum(
-            isVictory = false,
-            countStep = 0,
-            sqrt = sqrt,
-            listCells = listModel
-        )
     }
 
 
-    private fun getColorCorrectPosition(intValue: Int, index: Int): ColorCell {
-        return if (intValue == finalState[index]) ColorCell.CORRECT_POSITION
+    private fun getColorCorrectPosition(
+        finalList: List<Int?>,
+        intValue: Int,
+        index: Int
+    ): ColorCell {
+        return if (intValue == finalList[index]) ColorCell.CORRECT_POSITION
         else ColorCell.DEFAULT
 
     }
 
-    private fun getListInt(): List<Int?> {
-        val mutableList = finalState.toMutableList()
+    private fun getListInt(donorList: List<Int?>): List<Int?> {
+        val mutableList = donorList.toMutableList()
 
         // два дня на коленях умолял gpt сделать код
         fun isSolvable(tiles: List<Int?>): Boolean {
@@ -91,11 +91,21 @@ class FifteenGameImpl : FifteenGame {
         return mutableList
     }
 
-    private fun swap(oldList: List<MyCell?>, indexItem: Int, indexNull: Int): List<MyCell?> {
+    private fun swap(
+        finalList: List<Int?>,
+        oldList: List<MyCell?>,
+        indexItem: Int,
+        indexNull: Int
+    ): List<MyCell?> {
         val newList = oldList.toMutableList()
         newList[indexItem] = newList[indexNull].also { newList[indexNull] = newList[indexItem] }
         newList[indexNull] = newList[indexNull]?.let { myCell ->
-            val color = getColorCorrectPosition(intValue = myCell.num, index = indexNull)
+            val color =
+                getColorCorrectPosition(
+                    finalList = finalList,
+                    intValue = myCell.num,
+                    index = indexNull
+                )
             myCell.copy(colorCell = color)
         }
 

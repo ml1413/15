@@ -5,14 +5,14 @@ import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
-class MyTypeConverters {
+class MyTypeConvertorFinalList {
     @TypeConverter
-    fun fromModelList(value: List<MyCellEntity?>): String {
+    fun fromList(value: List<Int?>): String {
         return Json.encodeToString(value = value)
     }
 
     @TypeConverter
-    fun toModelList(value: String): List<MyCellEntity?> {
-        return Json.decodeFromString(value)
+    fun toList(value: String): List<Int?> {
+        return Json.decodeFromString(string = value)
     }
 }

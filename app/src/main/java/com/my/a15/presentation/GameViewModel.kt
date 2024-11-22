@@ -5,8 +5,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.my.a15.data.game.VariantGrid
 import com.my.a15.domain.model.MyModelNum
+import com.my.a15.domain.model.VariantGrid
 import com.my.a15.domain.usecase.GetStartedModelUseCase
 import com.my.a15.domain.usecase.GetStartedUseCase
 import com.my.a15.domain.usecase.ReplaceElementUseCase
@@ -36,8 +36,7 @@ class GameViewModel @Inject constructor(
     }
 
     fun restartGame(grid: VariantGrid) {
-        // todo need method restart
-        _gameState.value = GameState.ResumeGame(myModelNum = getStartedModelUseCase(grid = grid))
+
     }
 
     fun replaceElement(indexItem: Int, indexNull: Int) {

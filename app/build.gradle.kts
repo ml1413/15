@@ -58,7 +58,7 @@ dependencies {
     //room
     implementation("androidx.room:room-ktx:2.5.0")
     annotationProcessor("androidx.room:room-compiler:2.5.0")
-//    ksp("androidx.room:room-compiler:2.5.0")
+    ksp("androidx.room:room-compiler:2.5.0")
     //serialization fro converter class
     implementation ("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.0")
 
